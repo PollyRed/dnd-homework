@@ -74,7 +74,7 @@ img {
   font-size: 20px;
   top: 0%;
   right: 5px;
-  display:none;
+  display: none;
 }
 
 .close::before {
@@ -83,6 +83,7 @@ img {
 
 .divtext {
   max-width: 95%;
+  outline: 0px solid transparent;
 }
 
 .divtext[placeholder]:empty:before {

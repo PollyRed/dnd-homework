@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
   let startX = 0;
   let startY = 0;
 
-  document.addEventListener('mousedown', e => {
+  document.addEventListener('mousedown', (e) => {
     const target = e.target.closest('.card');
     if (!target) {
       return;
@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
     const width = selectedItem.clientWidth;
     const height = selectedItem.clientHeight;
     const rect = selectedItem.getBoundingClientRect();
-    const { scrollX, scrollY } = document.body;
+
     const left = rect.left + 0;
     const top = rect.top + 0;
     startX = e.clientX;
@@ -35,17 +35,21 @@ window.addEventListener('load', () => {
     draggedItem.style.top = `${top}px`;
     draggedItem.style.left = `${left}px`;
 
-    document.body.appendChild(draggedItem);
+    if (!e.target.classList.contains('close')) {
+      document.querySelector('.base').appendChild(draggedItem);
+    }
   });
 
-  document.addEventListener('mousemove', e => {
+  document.addEventListener('mousemove', (e) => {
+    e.preventDefault();
     if (!selectedItem) {
       return;
     }
-    const width = selectedItem.clientWidth;
-    const height = selectedItem.clientHeight;
+
+    document.body.style.cursor = 'grabbing';
+
     const rect = selectedItem.getBoundingClientRect();
-    const { scrollX, scrollY } = document.body;
+
     const left = rect.left + 0 + e.clientX - startX;
     const top = rect.top + 0 + e.clientY - startY;
 
@@ -53,20 +57,39 @@ window.addEventListener('load', () => {
     draggedItem.style.left = `${left}px`;
   });
 
-  document.addEventListener('mouseup', e => {
+  document.addEventListener('mouseup', (e) => {
+    e.preventDefault();
     if (!selectedItem) {
       return;
     }
+
+    document.body.style.cursor = 'default';
 
     const x = e.clientX;
     const y = e.clientY;
 
     draggedItem.style.display = 'none';
     const changingItem = document.elementFromPoint(x, y);
-    const parent = changingItem.closest('.card');
+    const parent = changingItem.closest('.board-list');
 
-    if (changingItem && parent) {
-      parent.insertBefore(selectedItem, changingItem);
+    try {
+      if (changingItem && !changingItem.classList.contains('list-title') && parent) {
+        parent.insertBefore(selectedItem, changingItem);
+      }
+    } catch (error) {
+      // no action required
+    }
+
+    selectedItem.classList.remove('list__item_selected');
+    selectedItem = null;
+
+    draggedItem.remove();
+    draggedItem = null;
+  });
+
+  document.addEventListener('mouseleave', () => {
+    if (!selectedItem) {
+      return;
     }
 
     selectedItem.classList.remove('list__item_selected');
