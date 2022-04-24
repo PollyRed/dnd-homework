@@ -69,6 +69,10 @@ img {
   padding-bottom: 5px;
 }
 
+.add-card:hover {
+  cursor: pointer;
+}
+
 .close {
   position: absolute;
   font-size: 20px;
