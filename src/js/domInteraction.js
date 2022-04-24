@@ -86,7 +86,6 @@ export default class DOMInteraction {
     document.body.style.cursor = 'grabbing';
 
     const rect = this.selectedItem.getBoundingClientRect();
-
     const left = rect.left + 0 + e.clientX - this.startX;
     const top = rect.top + 0 + e.clientY - this.startY;
 
@@ -119,7 +118,6 @@ export default class DOMInteraction {
 
     this.selectedItem.classList.remove('list__item_selected');
     this.selectedItem = null;
-
     this.draggedItem.remove();
     this.draggedItem = null;
   }
